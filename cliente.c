@@ -4,8 +4,7 @@
 #include "cliente.h"
 #include "funcoes.h"
 
-struct TCliente
-{
+struct TCliente{
     unsigned long id;
     char nome[100];
     char cpf[12];
@@ -13,14 +12,12 @@ struct TCliente
     char telefone[15];
 };
 
-int pesquisaClienteCPF(FILE *a, char *cpf)
-{
+int pesquisaClienteCPF(FILE *a, char *cpf){
     int posicao = 0;
     TCliente cliente;
     // posicionando no início do arquivo
     rewind(a);
-    while (fread(&cliente, sizeof(TCliente), 1, a) == 1)
-    {
+    while (fread(&cliente, sizeof(TCliente), 1, a) == 1){
         if (strcmp(cliente.cpf, cpf) == 0)
             return posicao;
         else
@@ -29,15 +26,13 @@ int pesquisaClienteCPF(FILE *a, char *cpf)
     return -1;
 }
 
-int pesquisaPrefixoNomeCliente(FILE *a, char *prefixo)
-{
+int pesquisaPrefixoNomeCliente(FILE *a, char *prefixo){
     int posicao = 0;
     char *ponteiro;
     TCliente cliente;
     // posicionando no início do arquivo
     rewind(a);
-    while (fread(&cliente, sizeof(TCliente), 1, a) == 1)
-    {
+    while (fread(&cliente, sizeof(TCliente), 1, a) == 1){
         // verificando se o nome possui a substring prefixo
         ponteiro = strstr(cliente.nome, prefixo);
         if (ponteiro)
@@ -48,14 +43,12 @@ int pesquisaPrefixoNomeCliente(FILE *a, char *prefixo)
     return -1;
 }
 
-int pesquisaIdCliente(FILE *a, int id)
-{
+int pesquisaIdCliente(FILE *a, int id){
     int posicao = 0;
     TCliente cliente;
     // posicionando no início do arquivo
     rewind(a);
-    while (fread(&cliente, sizeof(TCliente), 1, a) == 1)
-    {
+    while (fread(&cliente, sizeof(TCliente), 1, a) == 1){
         if (cliente.id == id)
             return posicao;
         else
@@ -64,17 +57,14 @@ int pesquisaIdCliente(FILE *a, int id)
     return -1;
 }
 
-void menuCliente()
-{
+void menuCliente(){
     int opcao;
-    do
-    {
+    do{
         printf("\n-----------------MANUTENCAO CLIENTES----------------\n");
         printf("\n1- Cadastro de Cliente\n2- Listagem de Cliente\n3- Consulta de Cliente \n4- Alteracaoo de Cliente\n5- Voltar ao menu principal\n");
         printf("Selecione a opcao Desejada: ");
         scanf("%d", &opcao);
-        switch (opcao)
-        {
+        switch (opcao){
         case 1:
             system("cls || clear");
             cadastroCliente();
@@ -96,29 +86,24 @@ void menuCliente()
     system("cls || clear");
 }
 
-void cadastroCliente()
-{
+void cadastroCliente(){
     FILE *arquivo_cliente;
     TCliente cliente;
     int sair, gravado, pesquisa;
     arquivo_cliente = fopen("cliente.dat", "rb+");
 
-    if (arquivo_cliente == NULL)
-    {
+    if (arquivo_cliente == NULL){
         arquivo_cliente = fopen("cliente.dat", "wb+");
-        if (arquivo_cliente == NULL)
-        {
+        if (arquivo_cliente == NULL){
             printf("Erro na criacao do arquivo!\n");
             pressioneEnter();
             return;
         }
     }
-    do
-    {
+    do{
         // Poosiciona no final do arquivo para nao sobreescrever os dados
         fseek(arquivo_cliente, 0, SEEK_END);
-        if (ftell(arquivo_cliente) > 0)
-        {
+        if (ftell(arquivo_cliente) > 0){
             // divide o tamanho total do arquivo pelo tamanho da estrutura e soma 1 para ser o id
             cliente.id = (ftell(arquivo_cliente)) / sizeof(TCliente) + 1;
         }
@@ -136,8 +121,7 @@ void cadastroCliente()
         gets(cliente.cpf);
         pesquisa = pesquisaClienteCPF(arquivo_cliente, cliente.cpf);
         // Verificando se o cpf consta no arquivo e se e valido
-        while (validarCPF(cliente.cpf) != 1 || pesquisa != -1)
-        {
+        while (validarCPF(cliente.cpf) != 1 || pesquisa != -1){
             if (pesquisa != -1)
                 printf("\nCPF ja e registrado no sistema");
             else
@@ -160,8 +144,7 @@ void cadastroCliente()
 
         gravado = fwrite(&cliente, sizeof(TCliente), 1, arquivo_cliente);
 
-        if (gravado != 1)
-        {
+        if (gravado != 1){
             printf("Erro na escrita do cadastro do cliente!!");
             pressioneEnter();
             return;
@@ -173,26 +156,22 @@ void cadastroCliente()
     fclose(arquivo_cliente);
 }
 
-void listagemCliente()
-{
+void listagemCliente(){
     FILE *arquivo_cliente;
     TCliente cliente;
     arquivo_cliente = fopen("cliente.dat", "rb");
 
-    if (arquivo_cliente == NULL)
-    {
+    if (arquivo_cliente == NULL){
         printf("Erro na abertura do arquivo!\n");
         pressioneEnter();
         return;
     }
 
     fseek(arquivo_cliente, 0, SEEK_END);
-    if (ftell(arquivo_cliente) > 0)
-    {
+    if (ftell(arquivo_cliente) > 0){
         rewind(arquivo_cliente);
         printf("\n================= LISTAGEM CLIENTES ================");
-        while (fread(&cliente, sizeof(TCliente), 1, arquivo_cliente) == 1)
-        {
+        while (fread(&cliente, sizeof(TCliente), 1, arquivo_cliente) == 1){
             printf("\nID: %lu", cliente.id);
             printf("\nNome: %s", cliente.nome);
             printf("\nCPF: %s", cliente.cpf);
@@ -208,8 +187,7 @@ void listagemCliente()
     pressioneEnter();
 }
 
-void consultaCliente()
-{
+void consultaCliente(){
     FILE *arquivo_cliente;
     TCliente cliente;
     int consulta, posicao, sair;
@@ -217,19 +195,16 @@ void consultaCliente()
     char cpf[13], prefixo[100];
     arquivo_cliente = fopen("cliente.dat", "rb");
 
-    if (arquivo_cliente == NULL)
-    {
+    if (arquivo_cliente == NULL){
         printf("Erro na abertura do arquivo!\n");
         pressioneEnter();
         return;
     }
-    do
-    {
+    do{
         printf("\n1- Para consulta por ID \n2- Para consulta por CPF \n3- Para consulta por prefixo do nome\n");
         printf("Selecione a opcao Desejada: ");
         scanf("%d", &consulta);
-        switch (consulta)
-        {
+        switch (consulta){
         case 1:
             printf("Forneca o ID que desaja consultar: ");
             scanf("%lu", &id);
@@ -251,8 +226,7 @@ void consultaCliente()
             posicao = pesquisaPrefixoNomeCliente(arquivo_cliente, prefixo);
             break;
         }
-        if (ftell(arquivo_cliente) > 0 && posicao != -1)
-        {
+        if (ftell(arquivo_cliente) > 0 && posicao != -1){
             fseek(arquivo_cliente, posicao * sizeof(TCliente), SEEK_SET);
             fread(&cliente, sizeof(TCliente), 1, arquivo_cliente);
             printf("\n================== CONSULTA CLIENTE =================");
@@ -273,8 +247,7 @@ void consultaCliente()
     pressioneEnter();
 }
 
-void alterarCliente()
-{
+void alterarCliente(){
     FILE *arquivo_cliente;
     TCliente cliente;
     int consulta, posicao, sair, pesquisa;
@@ -282,19 +255,16 @@ void alterarCliente()
     char cpf[13], prefixo[100];
     arquivo_cliente = fopen("cliente.dat", "rb+");
 
-    if (arquivo_cliente == NULL)
-    {
+    if (arquivo_cliente == NULL){
         printf("Erro na abertura do arquivo!\n");
         pressioneEnter();
         return;
     }
-    do
-    {
+    do{
         printf("\n1- Para alterar por ID \n2- Para alterar por CPF \n3- Para alterar por  nome\n");
         printf("Selecione a opcao Desejada: ");
         scanf("%d", &consulta);
-        switch (consulta)
-        {
+        switch (consulta){
         case 1:
             printf("Forneca o ID que desaja alterar: ");
             scanf("%lu", &id);
@@ -315,8 +285,7 @@ void alterarCliente()
             maiuscSemAcento(prefixo);
             posicao = pesquisaPrefixoNomeCliente(arquivo_cliente, prefixo);
         }
-        if (ftell(arquivo_cliente) > 0 && posicao != -1)
-        {
+        if (ftell(arquivo_cliente) > 0 && posicao != -1){
 
             printf("\n================ ALTERACAO CLIENTE =================\n");
             printf("Forneca o nome: ");
@@ -329,8 +298,7 @@ void alterarCliente()
             setbuf(stdin, NULL);
             gets(cliente.cpf);
             pesquisa = pesquisaClienteCPF(arquivo_cliente, cliente.cpf);
-            while (validarCPF(cliente.cpf) != 1 || pesquisa != -1)
-            {
+            while (validarCPF(cliente.cpf) != 1 || pesquisa != -1){
                 if (pesquisa == posicao)
                     break;
                 else if (pesquisa != -1)
