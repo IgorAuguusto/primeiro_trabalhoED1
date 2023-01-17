@@ -138,8 +138,8 @@ ou em arquivo.
 
 Faltou um atributo identificador no relacionamento **Gera (dataAlteração).**
 
-## **Observações Finais:**
-1. O código deve ser feito em usando a linguagem C.
+## **Sobre o Trabalho:**
+1. O código deve ser feito usando a linguagem C.
 2. O código deve compilar usando C padrão (ANSI C). Basta evitar utilizar funções específicas 
 de uma determinada plataforma( Windows, Linux, etc).
 3. Utilizar TADs.
@@ -157,3 +157,7 @@ com a aplicação e a base de dados.
 10. Os nomes dos arquivos devem ser iguais aos adotados no texto com a extensão dat.
 11. Todo campo do tipo texto deve ser convertido para maiúsculo e sem acentuação.
 12. Comecem logo, pois a data de entrega jamais estará tão distante como nesse momento.
+
+#
+## **Observações**
+Código atual possui alguns Warnings quando compilado no compilador GCC(GNU Compiler Collection), mas funciona normalmente.
