@@ -181,7 +181,7 @@ void venda(){
                     case 1:
                         cont++;
                         tamanhoCarrinho++;
-                        //verificando se ja ouve remocao de algum produto, para n„o alocar mais memoria e sim usar a do produto que foi removido
+                        //verificando se ja ouve remocao de algum produto, para n√£o alocar mais memoria e sim usar a do produto que foi removido
                         if(remover == 0)
                             carrinho = (TCarrinho*)realloc(carrinho,tamanhoCarrinho*sizeof(TCarrinho));
                         else
@@ -259,5 +259,5 @@ void venda(){
     fclose(arquivo_produto);
     fclose(arquivo_vendedor);
     fclose(arquivo_cliente);
-    fclose(arquivo_cliente);
+    
 }
